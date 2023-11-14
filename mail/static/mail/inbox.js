@@ -8,6 +8,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // By default, load the inbox
   load_mailbox('inbox');
+
+  // When compose form is submitted, run the 'send_email' JS function
+  document.querySelector('#compose-view').addEventListener('submit', send_email);
 });
 
 function compose_email() {
@@ -30,4 +33,32 @@ function load_mailbox(mailbox) {
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
+}
+
+function send_email(){
+    // Prevent fast reloading
+    event.preventDefault();
+
+    // Make post request to gather sent email details
+
+    // Gather email details
+    const recipients = document.querySelector('#compose-recipients').value;
+    const subject = document.querySelector('#compose-subject').value;
+    const message = document.querySelector('#compose-body').value;
+
+    // Send email data to email function
+    fetch('/emails', {
+      method: 'POST',
+      body: JSON.stringify({
+          recipients: recipients,
+          subject: subject,
+          body: message
+      })
+    })
+
+    .then(response => response.json())
+    .then(result => {
+        console.log(result);
+        load_mailbox('sent');
+    });
 }
