@@ -50,6 +50,8 @@ function view_email(id){
 
         <br>
         ${email.body}
+        <br>
+        <br>
         `
 
         // Change opened status
@@ -61,6 +63,32 @@ function view_email(id){
               })
             })
         }
+
+        // Change archived status
+        const archive_button = document.createElement('button');
+
+        if (email.archived === true){
+            console.log('Email is archived:', email.archived);
+            archive_button.className = "btn btn-outline-primary"
+        }
+        else{
+            console.log('Email is not archived:', email.archived);
+            archive_button.className = "btn btn-outline-danger"
+        }
+
+        archive_button.innerHTML = email.archived ? "Unarchive" : "Archive";
+
+        archive_button.addEventListener('click', function() {
+            console.log('Archive button clicked')
+            fetch(`/emails/${email.id}`, {
+              method: 'PUT',
+              body: JSON.stringify({
+                  archived: !email.archived
+              })
+            })
+            .then(() => {load_mailbox('archive')})
+        });
+        document.querySelector('#details-view').append(archive_button);
 
     });
 }
