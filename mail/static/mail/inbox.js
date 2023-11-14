@@ -90,6 +90,30 @@ function view_email(id){
         });
         document.querySelector('#details-view').append(archive_button);
 
+        // Reply button
+        const reply_button = document.createElement('button');
+        reply_button.className = "btn btn-outline-primary";
+        reply_button.innerHTML = "Reply"
+
+        reply_button.addEventListener('click', function(){
+            console.log('Reply button clicked')
+            // Load email form but fill in some fields
+            compose_email()
+            document.querySelector('#compose-recipients').value = email.sender;
+            document.querySelector('#compose-body').value = `On ${email.timestamp}, ${email.sender} wrote: ${email.body}`;
+
+            // Check if email subject already has 'Re:' so it doesn't append more 'Re:'s
+            let subject = email.subject;
+            if(subject.split(' ',1)[0] != "Re:"){
+                subject = "Re: " + email.subject
+            }
+
+            document.querySelector('#compose-subject').value = subject;
+
+        });
+
+        document.querySelector('#details-view').append(reply_button);
+
     });
 }
 
