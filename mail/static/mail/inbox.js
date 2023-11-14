@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function compose_email() {
 
   // Show compose view and hide other views
+  document.querySelector('#details-view').style.display = 'none';
   document.querySelector('#emails-view').style.display = 'none';
   document.querySelector('#compose-view').style.display = 'block';
 
@@ -25,11 +26,43 @@ function compose_email() {
   document.querySelector('#compose-body').value = '';
 }
 
+function view_email(id){
+    console.log(`Email id: ${id}`)
+
+    fetch(`/emails/${id}`)
+    .then(response => response.json())
+    .then(email => {
+        console.log(email);
+
+        // Show details view but hide other views
+        document.querySelector('#details-view').style.display = 'block';
+        document.querySelector('#emails-view').style.display = 'none';
+        document.querySelector('#compose-view').style.display = 'none';
+
+        // Detail view HTML
+        document.querySelector('#details-view').innerHTML = `
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item"><strong>From: </strong> ${email.sender}</li>
+          <li class="list-group-item"><strong>To: </strong> ${email.recipients}</li>
+          <li class="list-group-item"><strong>Subject: </strong> ${email.subject}</li>
+          <li class="list-group-item"><strong>Sent on: </strong> ${email.timestamp}</li>
+        </ul>
+
+        <br>
+        ${email.body}
+        `
+
+        // Change opened status
+});
+}
+
 function load_mailbox(mailbox) {
   
   // Show the mailbox and hide other views
   document.querySelector('#emails-view').style.display = 'block';
   document.querySelector('#compose-view').style.display = 'none';
+  document.querySelector('#details-view').style.display = 'none';
+
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
@@ -53,7 +86,7 @@ function load_mailbox(mailbox) {
             <br>
         `;
 
-        // if opened change colour
+        // If opened change colour
         if (individualEmail.read === true){
             console.log('Email is read:', individualEmail.read);
             newEmail.className = "list-group-item list-group-item-dark"
@@ -65,6 +98,7 @@ function load_mailbox(mailbox) {
 
         newEmail.addEventListener('click', function() {
             console.log('This element has been clicked!');
+            view_email(individualEmail.id)
         });
         document.querySelector('#emails-view').append(newEmail);
 

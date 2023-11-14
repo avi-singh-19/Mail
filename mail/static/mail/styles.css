@@ -1,12 +1,3 @@
 textarea {
     min-height: 400px;
 }
-
-.opened {
-  background-color: grey; /* or any style you want for read emails */
-}
-
-.unopened {
-  background-color: white; /* or any style you want for unread emails */
-}
-
