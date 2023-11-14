@@ -53,7 +53,16 @@ function view_email(id){
         `
 
         // Change opened status
-});
+        if (!email.read){
+            fetch(`/emails/${email.id}`, {
+              method: 'PUT',
+              body: JSON.stringify({
+                  read: true
+              })
+            })
+        }
+
+    });
 }
 
 function load_mailbox(mailbox) {
