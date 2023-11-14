@@ -43,6 +43,7 @@ function load_mailbox(mailbox) {
     // Create card for each email
     emails.forEach(individualEmail => {
 
+        // Creating cards for each email in inbox & changing colour when read is T/F
         const newEmail = document.createElement('div');
         newEmail.className = "list-group-item";
         newEmail.innerHTML = `
@@ -52,9 +53,18 @@ function load_mailbox(mailbox) {
             <br>
         `;
 
+        // if opened change colour
+        if (individualEmail.read === true){
+            console.log('Email is read:', individualEmail.read);
+            newEmail.className = "list-group-item list-group-item-dark"
+        }
+        else{
+            console.log('Email is unread:', individualEmail.read);
+            newEmail.className = "list-group-item"
+        }
 
         newEmail.addEventListener('click', function() {
-            console.log('This element has been clicked!')
+            console.log('This element has been clicked!');
         });
         document.querySelector('#emails-view').append(newEmail);
 
