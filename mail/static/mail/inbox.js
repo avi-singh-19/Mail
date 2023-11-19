@@ -105,7 +105,7 @@ function view_email(id){
                 // Load email form but fill in some fields
                 compose_email()
                 document.querySelector('#compose-recipients').value = email.sender;
-                document.querySelector('#compose-body').value = `On ${email.timestamp}, ${email.sender} wrote: ${email.body}`;
+                document.querySelector('#compose-body').value = `On ${email.timestamp}, ${email.sender} wrote:\n ${email.body}`;
 
                 // Check if email subject already has 'Re:' so it doesn't append more 'Re:'s
                 let subject = email.subject;
