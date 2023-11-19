@@ -49,10 +49,9 @@ function view_email(id){
         </ul>
 
         <br>
-        ${email.body}
+        <div style="font-size: 20px;">${email.body}</div>
         <br>
-        <br>
-        `
+         `
 
         // Change opened status
         if (!email.read){
@@ -90,30 +89,34 @@ function view_email(id){
         });
         document.querySelector('#details-view').append(archive_button);
 
+        // Inserting a space between buttons
+        const space = document.createElement('div');
+        space.style.marginTop = "10px"; // Adjust margin for desired spacing
+        document.querySelector('#details-view').append(space);
+
         // Reply button
         const reply_button = document.createElement('button');
         reply_button.className = "btn btn-outline-primary";
         reply_button.innerHTML = "Reply"
 
-        reply_button.addEventListener('click', function(){
-            console.log('Reply button clicked')
-            // Load email form but fill in some fields
-            compose_email()
-            document.querySelector('#compose-recipients').value = email.sender;
-            document.querySelector('#compose-body').value = `On ${email.timestamp}, ${email.sender} wrote: ${email.body}`;
+        if (!email.archived) {
+            reply_button.addEventListener('click', function(){
+                console.log('Reply button clicked')
+                // Load email form but fill in some fields
+                compose_email()
+                document.querySelector('#compose-recipients').value = email.sender;
+                document.querySelector('#compose-body').value = `On ${email.timestamp}, ${email.sender} wrote: ${email.body}`;
 
-            // Check if email subject already has 'Re:' so it doesn't append more 'Re:'s
-            let subject = email.subject;
-            if(subject.split(' ',1)[0] != "Re:"){
-                subject = "Re: " + email.subject
-            }
+                // Check if email subject already has 'Re:' so it doesn't append more 'Re:'s
+                let subject = email.subject;
+                if(subject.split(' ',1)[0] != "Re:"){
+                    subject = "Re: " + email.subject
+                }
 
-            document.querySelector('#compose-subject').value = subject;
-
-        });
-
-        document.querySelector('#details-view').append(reply_button);
-
+                document.querySelector('#compose-subject').value = subject;
+            });
+            document.querySelector('#details-view').append(reply_button);
+        }
     });
 }
 
@@ -162,7 +165,6 @@ function load_mailbox(mailbox) {
             view_email(individualEmail.id)
         });
         document.querySelector('#emails-view').append(newEmail);
-
     })
 
 
